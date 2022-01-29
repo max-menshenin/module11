@@ -84,6 +84,47 @@ const display = () => {
 };
 // первая отрисовка карточек
 display();
+/*const shuffleFruits = () => {
+	// Вариант 1
+	// let result = [];
+	// while (fruits.length > 0) {
+	// 	// Находим случайный элемент из fruits, используя getRandomInt
+	// 	let randomKey = getRandomInt(0, fruits.length-1);
+	// 	// вставляем в result и вырезаем его из fruits 
+	// 	result.unshift(...fruits.splice(randomKey, 1));
+	// }
+	// fruits = result;
+
+	// Вариант 2
+	// function shuffle(arr){
+	// 	let j;
+	// 	for(let i = arr.length - 1; i > 0; i--){
+	// 		j = Math.floor(Math.random()*(i + 1));
+	// 		[arr[j],arr[i]] = [arr[i],arr[j]]
+	// 	}
+	// 	return arr;
+	// }
+	// fruits = shuffle(fruits);
+
+	// Вариант 3
+	function shuffle(arr) {
+		let randomIndex;
+		arr.forEach(function (item, currentIndex, arr) {
+			randomIndex = Math.floor(Math.random() * (currentIndex + 1));
+			[arr[randomIndex], arr[currentIndex]] = [arr[currentIndex], arr[randomIndex]]
+		});
+		return arr;
+	}
+	fruits = shuffle(fruits);
+
+};
+*/shuffleButton.addEventListener('click', () => {
+	let temp = JSON.stringify(fruits);
+	shuffleFruits();
+	if (temp === JSON.stringify(fruits)) alert('Порядок не изменился!');
+	display();
+});
+
 /*** ПЕРЕМЕШИВАНИЕ ***/
 // перемешивание массива
 const shuffleFruits = () => {
