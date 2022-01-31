@@ -1,6 +1,8 @@
 // элементы в DOM можно получить при помощи функции querySelector
 const fruitsList = document.querySelector('.fruits__list'); // список карточек
 const shuffleButton = document.querySelector('.shuffle__btn'); // кнопка перемешивания
+const minWeight = document.querySelector('.minweight__input'); // минимальный вес для фильтра
+const maxWeight = document.querySelector('.maxweight__input'); // максимальный вес для фильтра
 const filterButton = document.querySelector('.filter__btn'); // кнопка фильтрации
 const sortKindLabel = document.querySelector('.sort__kind'); // поле с названием сортировки
 const sortTimeLabel = document.querySelector('.sort__time'); // поле с временем сортировки
@@ -10,6 +12,7 @@ const kindInput = document.querySelector('.kind__input'); // поле с наз�
 const colorInput = document.querySelector('.color__input'); // поле с названием цвета
 const weightInput = document.querySelector('.weight__input'); // поле с весом
 const addActionButton = document.querySelector('.add__action__btn'); // кнопка добавления
+
 // массив цветов (ключи соответсвуют классам)
 const classArray = [{
   "fruit_violet": "фиолетовый",
@@ -84,45 +87,23 @@ const display = () => {
 };
 // первая отрисовка карточек
 display();
-/*const shuffleFruits = () => {
-	// Вариант 1
-	// let result = [];
-	// while (fruits.length > 0) {
-	// 	// Находим случайный элемент из fruits, используя getRandomInt
-	// 	let randomKey = getRandomInt(0, fruits.length-1);
-	// 	// вставляем в result и вырезаем его из fruits 
-	// 	result.unshift(...fruits.splice(randomKey, 1));
-	// }
-	// fruits = result;
 
-	// Вариант 2
-	// function shuffle(arr){
-	// 	let j;
-	// 	for(let i = arr.length - 1; i > 0; i--){
-	// 		j = Math.floor(Math.random()*(i + 1));
-	// 		[arr[j],arr[i]] = [arr[i],arr[j]]
-	// 	}
-	// 	return arr;
-	// }
-	// fruits = shuffle(fruits);
+function shuffle(arr) {
+  let randomIndex;
+  arr.forEach(function (item, currentIndex, arr) {
+    randomIndex = Math.floor(Math.random() * (currentIndex + 1));
+    [arr[randomIndex], arr[currentIndex]] = [arr[currentIndex], arr[randomIndex]]
+  });
+  return arr;
+}
+fruits = shuffle(fruits);
 
-	// Вариант 3
-	function shuffle(arr) {
-		let randomIndex;
-		arr.forEach(function (item, currentIndex, arr) {
-			randomIndex = Math.floor(Math.random() * (currentIndex + 1));
-			[arr[randomIndex], arr[currentIndex]] = [arr[currentIndex], arr[randomIndex]]
-		});
-		return arr;
-	}
-	fruits = shuffle(fruits);
 
-};
-*/shuffleButton.addEventListener('click', () => {
-	let temp = JSON.stringify(fruits);
-	shuffleFruits();
-	if (temp === JSON.stringify(fruits)) alert('Порядок не изменился!');
-	display();
+shuffleButton.addEventListener('click', () => {
+  let temp = JSON.stringify(fruits);
+  shuffleFruits();
+  if (temp === JSON.stringify(fruits)) alert('Порядок не изменился!');
+  display();
 });
 
 /*** ПЕРЕМЕШИВАНИЕ ***/
@@ -146,30 +127,32 @@ const shuffleFruits = () => {
     fruits = result;
   }
 };
+
 shuffleButton.addEventListener('click', () => {
   shuffleFruits();
   display();
 });
+
 /*** ФИЛЬТРАЦИЯ ***/
 // фильтрация массива
 const filterFruits = () => {
   // fruits = JSON.parse(fruitsJSON);
   let result = [];
-  let minWeght = document.getElementById('minValue').value;
-  let maxWeght = document.getElementById('maxValue').value;
-  if ((minWeght === '') || (maxWeght === '')) {
+  let minWeight = document.getElementById('minValue').value;
+  let maxWeight = document.getElementById('maxValue').value;
+  if ((minWeight === '') || (maxWeight === '')) {
     alert('Одно или несколько полей незаполнены.')
   } else {
-  result = fruits.filter((item) => {
-    if ((item.weight >= minWeght) && (item.weight <= maxWeght)) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  // TODO: допишите функцию
-  fruits = result;
-}
+    result = fruits.filter((item) => {
+      if ((item.weight >= minWeight) && (item.weight <= maxWeight)) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    // TODO: допишите функцию
+    fruits = result;
+  }
 }
 filterButton.addEventListener('click', () => {
   filterFruits();
@@ -210,4 +193,8 @@ function partition(fruits, left, right) {
     }
   }
   return i;
+};
+
+const comparationWeight = (fruit1, fruit2) => {
+	return fruit1.weight > fruit2.weight;
 };
