@@ -246,7 +246,7 @@ const sortAPI = {
 			}
 			return arr;
 		}
-
+//
 		// запуск быстрой сортировки
 		quickSortAlg(arr, comparation);
 	},
