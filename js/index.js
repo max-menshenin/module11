@@ -138,8 +138,9 @@ shuffleButton.addEventListener('click', () => {
 const filterFruits = () => {
   // fruits = JSON.parse(fruitsJSON);
   let result = [];
-  let minWeight = document.getElementById('minValue').value;
-  let maxWeight = document.getElementById('maxValue').value;
+  console.log();
+  let minWeight = document.querySelector('.minweight__input').value;
+  let maxWeight = document.querySelector('.maxweight__input').value;
   if ((minWeight === '') || (maxWeight === '')) {
     alert('Одно или несколько полей незаполнены.')
   } else {
