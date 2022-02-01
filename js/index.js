@@ -280,3 +280,15 @@ sortActionButton.addEventListener('click', () => {
 	// Вывод в sortTimeLabel значение sortTime
 	sortTimeLabel.textContent = sortTime;
 });
+
+addActionButton.addEventListener('click', () => {
+	// проверяем заполнение всех полей
+	if (kindInput.value == 0 || colorInput.value == 0 || weightInput.value == 0) {
+		alert('Не заполнено одно из полей при добавлении нового элемента!');
+	}
+	else {
+		fruits.push({ "kind": kindInput.value, "color": colorInput.value, "weight": weightInput.value });
+	}
+	display();
+});
+
