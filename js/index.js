@@ -1,8 +1,6 @@
 // элементы в DOM можно получить при помощи функции querySelector
 const fruitsList = document.querySelector('.fruits__list'); // список карточек
 const shuffleButton = document.querySelector('.shuffle__btn'); // кнопка перемешивания
-const minWeight = document.querySelector('.minweight__input'); // минимальный вес для фильтра
-const maxWeight = document.querySelector('.maxweight__input'); // максимальный вес для фильтра
 const filterButton = document.querySelector('.filter__btn'); // кнопка фильтрации
 const sortKindLabel = document.querySelector('.sort__kind'); // поле с названием сортировки
 const sortTimeLabel = document.querySelector('.sort__time'); // поле с временем сортировки
@@ -87,16 +85,6 @@ const display = () => {
 };
 // первая отрисовка карточек
 display();
-
-function shuffle(arr) {
-  let randomIndex;
-  arr.forEach(function (item, currentIndex, arr) {
-    randomIndex = Math.floor(Math.random() * (currentIndex + 1));
-    [arr[randomIndex], arr[currentIndex]] = [arr[currentIndex], arr[randomIndex]]
-  });
-  return arr;
-}
-fruits = shuffle(fruits);
 
 
 shuffleButton.addEventListener('click', () => {
@@ -199,3 +187,96 @@ function partition(fruits, left, right) {
 const comparationWeight = (fruit1, fruit2) => {
 	return fruit1.weight > fruit2.weight;
 };
+
+const sortAPI = {
+	//функция сортировки пузырьком
+	bubbleSort(arr, comparation) {
+		for (let i = 0, endI = arr.length - 1; i < endI; i++) {
+			let wasSwap = false;
+			for (let j = 0, endJ = endI - i; j < endJ; j++) {
+				if (comparation(arr[j], arr[j + 1])) {
+					[arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+					wasSwap = true;
+				}
+			}
+			if (!wasSwap) break;
+		}
+		return arr;
+	},
+
+	//функция быстрой сортировки
+	quickSort(arr, comparation) {
+		// функция обмена элементов
+		function swap(arr, firstIndex, secondIndex) {
+			[arr[firstIndex], arr[secondIndex]] = [arr[secondIndex], arr[firstIndex]];
+		}
+
+		// функция разделитель
+		function partition(arr, comparation, left, right) {
+			let pivot = arr[Math.floor((right + left) / 2)],
+				i = left,
+				j = right;
+			while (i <= j) {
+				while (comparation(pivot, arr[i])) {
+					i++;
+				}
+				while (comparation(arr[j], pivot)) {
+					j--;
+				}
+				if (i <= j) {
+					swap(arr, i, j);
+					i++;
+					j--;
+				}
+			}
+			return i;
+		}
+
+		// алгоритм быстрой сортировки
+		function quickSortAlg(arr, comparation, left = 0, right = arr.length - 1) {
+			let index;
+			if (arr.length > 1) {
+				index = partition(arr, comparation, left, right);
+				if (left < index - 1) {
+					quickSortAlg(arr, comparation, left, index - 1);
+				}
+				if (index < right) {
+					quickSortAlg(arr, comparation, index, right);
+				}
+			}
+			return arr;
+		}
+
+		// запуск быстрой сортировки
+		quickSortAlg(arr, comparation);
+	},
+
+	// выполняет сортировку и производит замер времени
+	startSort(sort, arr, comparation) {
+		const start = new Date().getTime();
+		sort(arr, comparation);
+		const end = new Date().getTime();
+		sortTime = `${end - start} ms`;
+	},
+};
+
+// инициализация полей
+sortKindLabel.textContent = sortKind;
+sortTimeLabel.textContent = sortTime;
+
+// переключение типа сортировки 
+sortChangeButton.addEventListener('click', () => {
+	(sortKind == 'bubbleSort') ? sortKind = 'quickSort' : sortKind = 'bubbleSort';
+	// вывод текущего типа сортировки
+	sortKindLabel.textContent = sortKind;
+});
+
+sortActionButton.addEventListener('click', () => {
+	// Вывод в sortTimeLabel значение 'sorting...'
+	sortTimeLabel.textContent = 'sorting...';
+	const sort = sortAPI[sortKind];
+	sortAPI.startSort(sort, fruits, comparationColor);
+	display();
+	// Вывод в sortTimeLabel значение sortTime
+	sortTimeLabel.textContent = sortTime;
+});
